@@ -1,12 +1,10 @@
+import { createAsync, useParams, type RouteDefinition } from "@solidjs/router";
 import PartySocket from "partysocket";
-import { Show, createSignal, onMount } from "solid-js";
-import type { RouteDataArgs } from "solid-start";
-import { parseCookie, useParams, useRouteData } from "solid-start";
-import { createServerData$, useRequest } from "solid-start/server";
+import { Show, createEffect, createSignal } from "solid-js";
 import { FastSpinner } from "~/components/Spinner";
 import { clientEnv } from "~/env/client";
 import { Message } from "~/env/party";
-import { nanoid } from "~/util/nanoid";
+import { getUserToken as getUserToken$ } from "~/util/auth";
 import { showToast } from "~/util/toaster";
 import TicketIcon from "~icons/heroicons/ticket";
 
@@ -14,36 +12,18 @@ type PageParams = {
   event_id: string;
 };
 
-export function routeData({ params }: RouteDataArgs) {
-  return createServerData$(
-    (_, event) => {
-      const req = useRequest();
-
-      if (!req.request) return;
-
-      const userToken = parseCookie(req.request.headers.get("cookie") ?? "").user_token;
-      if (!userToken) {
-        const newToken = nanoid(10);
-        req.responseHeaders.set("Set-Cookie", `user_token=${newToken}`);
-        return newToken;
-      }
-
-      return userToken;
-    },
-    {
-      deferStream: true,
-    },
-  );
-}
+export const route = {
+  load: () => getUserToken$(),
+} satisfies RouteDefinition;
 
 export default function TicketPage() {
   const params = useParams<PageParams>();
-  const getUserToken = useRouteData<typeof routeData>();
+  const getUserToken = createAsync(() => getUserToken$());
 
   const [ticketNum, setTicketNum] = createSignal<number>(-1);
   const [total, setTotal] = createSignal<number>(-1);
 
-  onMount(() => {
+  createEffect(() => {
     const partySocket = new PartySocket({
       host: import.meta.env.DEV ? "localhost:1999" : clientEnv.VITE_PARTY_SOCKET,
       room: params.event_id,
@@ -71,6 +51,10 @@ export default function TicketPage() {
         description: "",
       });
     });
+
+    return () => {
+      partySocket.close();
+    };
   });
 
   return (

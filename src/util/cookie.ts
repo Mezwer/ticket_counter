@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { parse } from "cookie-es";
 import type { Signal } from "solid-js";
 import { createEffect, createSignal } from "solid-js";
-import { isServer } from "solid-js/web";
-import { parseCookie } from "solid-start";
-import { useRequest } from "solid-start/server";
+import { getRequestEvent, isServer } from "solid-js/web";
 
 export type MaxAgeOptions = {
   /**
@@ -48,7 +47,7 @@ export function createServerCookie<T>(
   const { deserialize = (v: any) => v as T, serialize = String, cookieMaxAge = YEAR } = options ?? {};
 
   const [cookie, setCookie] = createSignal(
-    deserialize(parseCookie(isServer ? useRequest().request.headers.get("cookie") ?? "" : document.cookie)[name]),
+    deserialize(parse(isServer ? getRequestEvent()!.request.headers.get("cookie") ?? "" : document.cookie)[name]),
   );
 
   createEffect((p) => {

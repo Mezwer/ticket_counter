@@ -2,7 +2,7 @@ import presetUno from "@unocss/preset-uno";
 import presetWebFonts from "@unocss/preset-web-fonts";
 import transformerDirectives from "@unocss/transformer-directives";
 import transformerVariantGroup from "@unocss/transformer-variant-group";
-import { defineConfig, presetTypography } from "unocss";
+import { defineConfig, type Preset } from "unocss";
 import { presetKobalte } from "unocss-preset-primitives";
 import { theme } from "unocss/preset-mini";
 
@@ -51,16 +51,7 @@ export default defineConfig({
 
   presets: [
     presetUno(),
-    presetKobalte(),
-    // presetRadix({
-    //   palette: ["blue", "green", "red", "slate"],
-    //   darkSelector: ".dark",
-    //   aliases: {
-    //     primary: "blue",
-    //     base: "slate",
-    //   },
-    //   extend: true,
-    // }) as Preset,
+    presetKobalte() as Preset,
     presetWebFonts({
       provider: "google",
       fonts: {
@@ -68,34 +59,6 @@ export default defineConfig({
           name: "Hanken Grotesk",
           weights: ["300", "400", "600", "700"],
           italic: true,
-        },
-      },
-    }),
-    presetTypography({
-      cssExtend: {
-        "blockquote p:first-of-type::before": { content: "none" },
-        "blockquote p:first-of-type::after": { content: "none" },
-        "code::before": { content: "none" },
-        "code::after": { content: "none" },
-        h1: {
-          "font-weight": "600",
-          "font-size": "1.75rem",
-          "border-bottom": "1px solid #e5e7eb",
-          "padding-bottom": "1rem",
-          "margin-top": "2rem",
-          color: "var(--tw-prose-headings)",
-        },
-        h2: {
-          "font-weight": "600",
-          "border-bottom": "1px solid #e5e7eb",
-          "padding-bottom": "1rem",
-          "margin-top": "2rem",
-          color: "var(--tw-prose-headings)",
-        },
-        a: {
-          color: "#999",
-          "text-decoration": "none",
-          "font-weight": "600",
         },
       },
     }),

@@ -1,12 +1,6 @@
-import { redirect, useRouteData } from "solid-start";
-import { createServerData$ } from "solid-start/server";
+import { Navigate } from "@solidjs/router";
 import { nanoid } from "~/util/nanoid";
 
-export function routeData() {
-  return createServerData$(() => redirect(`/${nanoid(9)}`));
-}
-
 export default function NewPage() {
-  useRouteData();
-  return <></>;
+  return <Navigate href={`/${nanoid(9)}`} />;
 }

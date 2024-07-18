@@ -1,5 +1,4 @@
-import { Dialog as KBDialog } from "@kobalte/core";
-import type { DialogRootProps } from "@kobalte/core/dist/types/dialog";
+import { Dialog as KBDialog, type DialogRootProps } from "@kobalte/core/dialog";
 import type { JSX, ParentComponent } from "solid-js";
 import { Show, splitProps } from "solid-js";
 import { css } from "solid-styled";
@@ -73,7 +72,7 @@ export const Dialog: ParentComponent<DialogProps> = (props) => {
   `;
 
   return (
-    <KBDialog.Root {...others}>
+    <KBDialog {...others}>
       <KBDialog.Portal>
         <KBDialog.Overlay
           use:solid-styled
@@ -84,7 +83,7 @@ export const Dialog: ParentComponent<DialogProps> = (props) => {
             class="dialog__content z-99 max-h-[80vh] max-w-xl flex flex-col overflow-y-scroll border border-neutral-300 rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:(border-neutral-700 bg-neutral-800 text-neutral-100)"
             use:solid-styled
           >
-            <div class="mb-3 flex items-center justify-between text-xl font-semibold leading-6 text-gray-950 dark:text-gray-50">
+            <div class="mb-3 flex items-center justify-between text-xl text-gray-950 font-semibold leading-6 dark:text-gray-50">
               <Show when={local.title != undefined}>
                 <KBDialog.Title>{local.title}</KBDialog.Title>
               </Show>
@@ -96,6 +95,6 @@ export const Dialog: ParentComponent<DialogProps> = (props) => {
           </KBDialog.Content>
         </div>
       </KBDialog.Portal>
-    </KBDialog.Root>
+    </KBDialog>
   );
 };

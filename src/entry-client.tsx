@@ -1,7 +1,7 @@
-import { mount, StartClient } from "solid-start/entry-client";
+import { mount, StartClient } from "@solidjs/start/client";
 
 if (import.meta.env.DEV) {
   await import("solid-devtools");
 }
 
-mount(() => <StartClient />, document);
+mount(() => <StartClient />, document.getElementById("app")!);

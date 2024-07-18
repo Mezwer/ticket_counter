@@ -26,15 +26,18 @@ export function ThemeProvider(props: { children: JSX.Element }): JSX.Element;
 export function ThemeProvider(props: { children: (theme: Accessor<Theme>) => JSX.Element }): JSX.Element;
 export function ThemeProvider(props: { children: JSX.Element | ((theme: Accessor<Theme>) => JSX.Element) }) {
   const [theme, updateTheme] = createUserTheme("color-theme", {
-    defaultValue: "light",
+    defaultValue: "dark",
   });
 
-  const child = props.children;
-  const fn = typeof child === "function" && child.length > 0;
+  const Inner = () => {
+    const child = props.children;
+    const fn = typeof child === "function" && child.length > 0;
+    return fn ? child(theme) : (child as JSX.Element);
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, updateTheme }}>
-      {fn ? child(theme) : (child as JSX.Element)}
+      <Inner />
     </ThemeContext.Provider>
   );
 }
@@ -51,7 +54,7 @@ export const ThemeControllerButton = () => {
   });
 
   onMount(() => {
-    if (theme() == undefined) {
+    if (theme() === undefined) {
       updateTheme(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     }
   });
@@ -85,13 +88,13 @@ export const ThemeControllerButton = () => {
       <Tooltip.Trigger
         onClick={toggleDarkMode}
         type="button"
-        aria-label={theme() == "dark" ? "Switch to light mode" : "Switch to dark mode"}
+        aria-label={theme() === "dark" ? "Switch to light mode" : "Switch to dark mode"}
         class="m-0 w-10 bg-neutral-200/50 p-0 text-neutral-500 outline-none dark:bg-neutral-700/50 hover:bg-neutral-300/60 dark:text-neutral-400 hover:text-neutral-800 btn dark:hover:bg-neutral-600/60 dark:hover:text-neutral-100"
       >
-        <Show when={theme() == "dark"}>
+        <Show when={theme() === "dark"}>
           <SunIcon class="h-5 w-5" />
         </Show>
-        <Show when={theme() == "light"}>
+        <Show when={theme() === "light"}>
           <MoonIcon class="h-5 w-5" />
         </Show>
       </Tooltip.Trigger>
@@ -101,7 +104,7 @@ export const ThemeControllerButton = () => {
           use:solid-styled
         >
           <Tooltip.Arrow />
-          <p>{theme() == "dark" ? "Switch to light mode" : "Switch to dark mode"}</p>
+          <p>{theme() === "dark" ? "Switch to light mode" : "Switch to dark mode"}</p>
         </Tooltip.Content>
       </Tooltip.Portal>
     </Tooltip.Root>

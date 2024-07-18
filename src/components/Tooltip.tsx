@@ -1,18 +1,19 @@
-import { Tooltip as KBTooltip } from "@kobalte/core";
-import type { Placement } from "@kobalte/core/dist/types/popper/utils";
-import type { TooltipTriggerProps } from "@kobalte/core/dist/types/tooltip";
-import type { JSX, ParentComponent } from "solid-js";
+import type { PolymorphicProps } from "@kobalte/core/polymorphic";
+import { Tooltip as KBTooltip, type TooltipRootProps, type TooltipTriggerProps } from "@kobalte/core/tooltip";
+import type { JSX, ValidComponent } from "solid-js";
 import { createSignal, splitProps } from "solid-js";
 import { css } from "solid-styled";
 
-interface TooltipProps extends TooltipTriggerProps {
-  children: JSX.Element;
-  tooltipText: JSX.Element;
-  placement?: Placement;
-  openDelay?: number;
-}
+type TooltipProps<T extends ValidComponent = "button"> = PolymorphicProps<
+  T,
+  TooltipTriggerProps<T> & {
+    tooltipText: JSX.Element;
+    placement?: TooltipRootProps["placement"];
+    openDelay?: number;
+  }
+>;
 
-export const Tooltip: ParentComponent<TooltipProps> = (props) => {
+export const Tooltip = <T extends ValidComponent = "button">(props: TooltipProps<T>) => {
   const [open, setOpen] = createSignal(false);
 
   const [local, others] = splitProps(props, ["tooltipText", "placement", "openDelay"]);
@@ -40,8 +41,8 @@ export const Tooltip: ParentComponent<TooltipProps> = (props) => {
   `;
 
   return (
-    <KBTooltip.Root onOpenChange={setOpen} placement={local.placement} openDelay={local.openDelay}>
-      <KBTooltip.Trigger {...others}></KBTooltip.Trigger>
+    <KBTooltip onOpenChange={setOpen} placement={local.placement} openDelay={local.openDelay}>
+      <KBTooltip.Trigger {...(others as unknown as PolymorphicProps<T, TooltipTriggerProps<T>>)}></KBTooltip.Trigger>
       <KBTooltip.Portal>
         <KBTooltip.Content
           class="tooltip__content z-10 inline-block max-w-sm border border-neutral-300 rounded-lg bg-white p-2 px-2.5 dark:(border-neutral-600 bg-neutral-700 text-neutral-100)"
@@ -51,6 +52,6 @@ export const Tooltip: ParentComponent<TooltipProps> = (props) => {
           <p>{local.tooltipText}</p>
         </KBTooltip.Content>
       </KBTooltip.Portal>
-    </KBTooltip.Root>
+    </KBTooltip>
   );
 };
