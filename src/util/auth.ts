@@ -13,7 +13,7 @@ export const getUserToken = cache(async () => {
   const userToken = getCookie("user_token");
   if (!userToken) {
     const newToken = nanoid(10);
-    req.response.headers.append("Set-Cookie", `user_token=${newToken}`);
+    // req.response.headers.append("Set-Cookie", `user_token=${newToken}`);
     return newToken;
   }
 

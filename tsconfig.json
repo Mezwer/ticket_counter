@@ -1,32 +1,33 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "node",
-    "jsxImportSource": "solid-js",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "allowJs": true,
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": true,
     "types": [
-      "vinxi/client",
-      "vite/client",
+      "vinxi/types/client",
+      "node",
       "unplugin-icons/types/solid",
     ],
-    "baseUrl": "./",
     "paths": {
       "~/*": [
         "./src/*"
       ]
     },
   },
-  "include": [
-    "src",
-    "party",
-    ".eslintrc.cjs",
-    "app.config.ts",
-    "unocss.config.ts"
+  "exclude": [
+    "node_modules",
+    ".vinxi",
+    ".partykit",
+    ".wrangler",
+    ".output",
+    "dist"
   ]
 }

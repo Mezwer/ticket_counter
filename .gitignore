@@ -133,6 +133,8 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
+# Cloudflare Wrangler environment variables file
+.dev.vars
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

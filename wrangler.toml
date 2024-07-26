@@ -1,0 +1,10 @@
+name = "ticket-counter"
+pages_build_output_dir="dist"
+compatibility_date = "2024-07-18"
+compatibility_flags = ["nodejs_compat"]
+node_compat = true
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "ticket_counter"
+database_id = "da763091-4068-4ca7-aa9b-aa897d6e166b"

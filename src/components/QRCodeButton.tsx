@@ -1,5 +1,5 @@
 import { createSignal, type VoidComponent } from "solid-js";
-import { QRCodeSVG } from "solid-qr-code";
+import { QRCodeCanvas } from "solid-qr-code";
 import QRCodeIcon from "~icons/heroicons/qr-code";
 import { Dialog } from "./Dialog";
 import { useTheme } from "./ThemeController";
@@ -20,14 +20,16 @@ export const QRCodeButton: VoidComponent<QRCodeButtonProps> = (props) => {
         <QRCodeIcon class="h-6 w-6" />
       </button>
       <Dialog open={dialogOpen()} onOpenChange={setDialogOpen} title="QR Code">
-        <QRCodeSVG
-          class="p-2"
-          size={300}
-          level="M"
-          bgColor="transparent"
-          fgColor={useTheme().theme() == "dark" ? "#fff" : "#000"}
-          value={props.link}
-        ></QRCodeSVG>
+        <div class="p-2">
+          <QRCodeCanvas
+            size={300}
+            level="medium"
+            bgColor="transparent"
+            fgColor={useTheme().theme() == "dark" ? "#fff" : "#000"}
+            value={props.link}
+            title={"Share link"}
+          ></QRCodeCanvas>
+        </div>
       </Dialog>
     </>
   );

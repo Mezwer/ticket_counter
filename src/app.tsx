@@ -6,6 +6,7 @@ import type { RouteSectionProps } from "@solidjs/router";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
+import { AuthInfo } from "./components/AuthInfo";
 import { QRCodeButton } from "./components/QRCodeButton";
 import { ThemeControllerButton, ThemeProvider } from "./components/ThemeController";
 
@@ -14,8 +15,13 @@ const Root = (prop: RouteSectionProps) => {
     <Suspense>
       <ThemeProvider>
         <div class="absolute right-0 top-0 flex items-center gap-2 p-4">
+          {/* Todo: make NavPortal */}
           <QRCodeButton link={location.href}></QRCodeButton>
           <ThemeControllerButton />
+          {/* <A href="/login/google" class="bg-white btn">
+            Login With Google
+          </A> */}
+          <AuthInfo />
         </div>
         {prop.children}
         <Toast.Region>

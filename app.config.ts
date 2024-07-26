@@ -10,6 +10,9 @@ export default defineConfig({
     rollupConfig: {
       external: ["__STATIC_CONTENT_MANIFEST", "node:async_hooks"],
     },
+    experimental: {
+      wasm: true,
+    },
   },
   vite: {
     plugins: [
@@ -35,4 +38,5 @@ export default defineConfig({
       external: ["@prisma/client"],
     },
   },
+  middleware: "./src/middleware.ts",
 });
