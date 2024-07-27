@@ -1,4 +1,4 @@
-import { action, useAction } from "@solidjs/router";
+import { action, cache, createAsync, revalidate, useAction, type RouteDefinition } from "@solidjs/router";
 import { createSignal, Show, type VoidComponent } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
 import { googleRedirectUrl } from "~/lib/auth";
@@ -13,10 +13,12 @@ const logoutAction = action(async () => {
   "use server";
   const event = getRequestEvent()!;
   const lucia = event.locals.lucia;
-  const session = event.nativeEvent.context.session;
+  const user = event.nativeEvent.context.user;
 
-  if (session) {
-    await lucia.invalidateSession(session.userId);
+  if (user) {
+    await lucia.invalidateSession(user.id);
+
+    void revalidate("auth-data");
     return true;
   }
 
@@ -96,6 +98,27 @@ export const LogoutButton: VoidComponent = () => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/require-await
+const authData = cache(async () => {
+  "use server";
+  const event = getRequestEvent()!;
+  const user = event.nativeEvent.context.user;
+
+  return user;
+}, "auth-data");
+
+export const route = {
+  preload: () => authData(),
+} satisfies RouteDefinition;
+
 export const AuthInfo: VoidComponent = () => {
-  return <LogoutButton />;
+  const session = createAsync(() => authData(), {
+    deferStream: true,
+  });
+
+  return (
+    <Show when={session()} fallback={<GLoginButton />}>
+      <LogoutButton />
+    </Show>
+  );
 };
