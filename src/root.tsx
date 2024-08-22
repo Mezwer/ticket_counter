@@ -3,14 +3,29 @@ import "@unocss/reset/tailwind-compat.css";
 import "virtual:uno.css";
 
 import { Toast } from "@kobalte/core";
-import { Suspense } from "solid-js";
-import { Body, ErrorBoundary, FileRoutes, Head, Html, Link, Meta, Routes, Scripts, Title } from "solid-start";
+import { Show, Suspense } from "solid-js";
+import {
+  Body,
+  ErrorBoundary,
+  FileRoutes,
+  Head,
+  Html,
+  Link,
+  Meta,
+  Routes,
+  Scripts,
+  Title,
+  useLocation,
+} from "solid-start";
 import { ThemeControllerButton, ThemeProvider } from "./components/ThemeController";
 
 import logo from "~/assets/img/logo.svg";
 import { QRCodeButton } from "./components/QRCodeButton";
+import { VerifyRoomButton } from "./components/VerifyRoomButton";
 
 export default function Root() {
+  const loc = useLocation();
+
   return (
     <ThemeProvider>
       {(theme) => (
@@ -29,7 +44,10 @@ export default function Root() {
           <Body class="h-full w-full bg-neutral-50 transition-colors duration-100 dark:bg-neutral-900">
             <Suspense>
               <ErrorBoundary>
-                <div class="absolute right-0 top-0 p-4 flex items-center gap-2">
+                <div class="absolute right-0 top-0 flex items-center gap-2 p-4">
+                  <Show when={loc.pathname === "/test"} fallback={null}>
+                    <VerifyRoomButton />
+                  </Show>
                   <QRCodeButton link={location.href}></QRCodeButton>
                   <ThemeControllerButton />
                 </div>
